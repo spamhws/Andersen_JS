@@ -6,12 +6,13 @@ function makeObjectDeepCopy(original) {
   const OBJ_COPY = {};
 
   for (const element in original) {
-    if (typeof original[element] !== 'object') {
-      OBJ_COPY[element] = original[element];
-    } else if (Array.isArray(original[element]) === true) {
-      OBJ_COPY[element] = [...original[element]];
+    const ELEM = original[element];
+    if (typeof ELEM !== 'object') {
+      OBJ_COPY[element] = ELEM;
+    } else if (Array.isArray(ELEM)) {
+      OBJ_COPY[element] = [...ELEM];
     } else {
-      OBJ_COPY[element] = makeObjectDeepCopy(original[element]);
+      OBJ_COPY[element] = makeObjectDeepCopy(ELEM);
     }
   }
 
