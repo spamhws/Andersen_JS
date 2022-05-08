@@ -61,13 +61,12 @@ const myIterable = {
       return !isNaN(value) && parseInt(Number(value)) === value && !isNaN(parseInt(value, 10));
     }
 
-    let values = Object.values(this);
     let index = this.from;
-    let limit = this.to;
+    const LIMIT = this.to;
 
     return {
       next() {
-        if (index <= limit) {
+        if (index <= LIMIT) {
           index++;
           return { value: index - 1, done: false };
         } else return { done: true };
