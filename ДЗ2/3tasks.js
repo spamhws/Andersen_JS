@@ -70,7 +70,9 @@ const myIterable = {
         if (index <= LIMIT) {
           index++;
           return { value: index - 1, done: false };
-        } else return { done: true };
+        } else {
+          return { done: true };
+        }
       },
     };
   },
