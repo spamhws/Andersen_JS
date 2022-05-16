@@ -20,12 +20,12 @@ function concatStrings(string, separator) {
     currentString = currentString.slice(0, -currentSeparator.length);
   }
 
-  const RESULT = currentString;
+  const result = currentString;
 
   currentString = '';
   currentSeparator = '';
 
-  return RESULT;
+  return result;
 }
 
 // Task 2, Calculator Class:
