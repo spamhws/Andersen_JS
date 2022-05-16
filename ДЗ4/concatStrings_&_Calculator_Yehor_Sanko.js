@@ -16,16 +16,16 @@ function concatStrings(string, separator) {
     return concatStrings;
   }
 
-  if (currentSeparator.length !== 0) {
+  if (currentSeparator.length) {
     currentString = currentString.slice(0, -currentSeparator.length);
   }
 
-  let result = currentString;
+  const RESULT = currentString;
 
   currentString = '';
   currentSeparator = '';
 
-  return result;
+  return RESULT;
 }
 
 // Task 2, Calculator Class:
