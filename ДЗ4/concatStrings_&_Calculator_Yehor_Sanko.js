@@ -7,13 +7,11 @@ function concatStrings(string, separator) {
   if (typeof string === 'string') {
     currentString += string;
 
-    if (currentString !== '') {
-      if (typeof separator === 'string') {
-        currentSeparator = separator;
-      }
-
-      currentString += currentSeparator;
+    if (typeof separator === 'string') {
+      currentSeparator = separator;
     }
+
+    currentString += currentSeparator;
 
     return concatStrings;
   }
