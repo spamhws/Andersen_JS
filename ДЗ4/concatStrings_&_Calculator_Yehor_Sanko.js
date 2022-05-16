@@ -10,11 +10,11 @@ function concatStrings(string, separator) {
     if (currentString !== '') {
       if (typeof separator === 'string') {
         currentSeparator = separator;
-        currentString += currentSeparator;
-      } else if (currentSeparator !== '') {
-        currentString += currentSeparator;
       }
+
+      currentString += currentSeparator;
     }
+
     return concatStrings;
   }
 
@@ -34,6 +34,7 @@ function concatStrings(string, separator) {
 
 function checkNumberValidity(input) {
   let result = typeof input === 'number' && isFinite(input);
+
   if (!result) {
     throw new Error('Invalid parameters passed to the Class');
   }
@@ -73,6 +74,7 @@ class Calculator {
     if (this.numY === 0) {
       throw new Error(`Second argument can't equal to 0`);
     }
+
     console.log(parseFloat((this.numX / this.numY).toFixed(2)));
   };
 }
