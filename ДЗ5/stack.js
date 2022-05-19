@@ -101,3 +101,5 @@ class Stack {
     return stackfromIterable;
   }
 }
+
+module.exports = { Stack };
