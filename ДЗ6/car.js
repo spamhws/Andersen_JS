@@ -10,11 +10,11 @@ class Car {
   #mileage = 0;
 
   set brand(value) {
-    if (value && value.length <= 50) {
-      this.#brand = value;
-    } else {
+    if (value?.length > 50) {
       throw new Error('Передано неправильное значение');
     }
+
+    this.#brand = value;
   }
 
   get brand() {
@@ -22,11 +22,11 @@ class Car {
   }
 
   set model(value) {
-    if (value && value.length <= 50) {
-      this.#model = value;
-    } else {
+    if (value?.length > 50) {
       throw new Error('Передано неправильное значение');
     }
+
+    this.#model = value;
   }
 
   get model() {
@@ -36,11 +36,11 @@ class Car {
   set yearOfManufacturing(value) {
     const currentYear = new Date().getFullYear();
 
-    if (1900 <= value <= currentYear) {
-      this.#yearOfManufacturing = value;
-    } else {
+    if (1900 > value || value > currentYear) {
       throw new Error('Передано неправильное значение');
     }
+
+    this.#yearOfManufacturing = value;
   }
 
   get yearOfManufacturing() {
@@ -48,11 +48,11 @@ class Car {
   }
 
   set maxSpeed(value) {
-    if (100 <= value && value < 300) {
-      this.#maxSpeed = value;
-    } else {
+    if (100 > value || value > 300) {
       throw new Error('Передано неправильное значение');
     }
+
+    this.#maxSpeed = value;
   }
 
   get maxSpeed() {
@@ -60,11 +60,11 @@ class Car {
   }
 
   set maxFuelVolume(value) {
-    if (5 <= value && value <= 20) {
-      this.#maxFuelVolume = value;
-    } else {
+    if (value < 5 || value > 20) {
       throw new Error('Передано неправильное значение');
     }
+
+    this.#maxFuelVolume = value;
   }
 
   get maxFuelVolume() {
@@ -81,12 +81,19 @@ class Car {
 
   get currentFuelVolume() {
     let litr = 'литров';
-    if (this.#currentFuelVolume.toString().slice(-1) === 1) {
-      litr = 'литр';
-    } else if (['2', '3', '4'].includes(this.#currentFuelVolume.toString().slice(-1))) {
-      litr = 'литра';
+    let fuelLastDigit = this.#currentFuelVolume.toFixed(2).toString().slice(-1);
+    let digitIs234 = ['2', '3', '4'].includes(fuelLastDigit);
+
+    switch (true) {
+      case fuelLastDigit === 1:
+        litr = 'литр';
+        break;
+      case digitIs234:
+        litr = 'литра';
+        break;
     }
-    return `${this.#currentFuelVolume} ${litr}`;
+
+    return `${this.#currentFuelVolume.toFixed(2)} ${litr}`;
   }
 
   get isStarted() {
@@ -100,45 +107,48 @@ class Car {
   start() {
     if (this.#isStarted) {
       throw new Error('Машина уже заведена');
-    } else {
-      this.#isStarted = true;
     }
+
+    this.#isStarted = true;
   }
 
   shutDownEngine() {
     if (!this.#isStarted) {
       throw new Error('Машина ещё не заведена');
-    } else {
-      this.#isStarted = false;
     }
+
+    this.#isStarted = false;
   }
 
   fillUpGasTank(amount) {
     if (typeof amount !== 'number' || amount <= 0) {
       throw new Error('Неверное количество топлива для заправки');
-    } else {
-      this.#currentFuelVolume += amount;
-
-      if (this.#maxFuelVolume < this.#currentFuelVolume) {
-        throw new Error('Топливный бак переполнен');
-      }
     }
+
+    if (this.#currentFuelVolume + amount > this.#maxFuelVolume) {
+      throw new Error('Топливный бак переполнен');
+    }
+
+    this.#currentFuelVolume += amount;
   }
 
   drive(speed, hours) {
-    if (typeof speed !== 'number' || speed <= 0) {
-      throw new Error('Неверная скорость');
-    } else if (typeof hours !== 'number' || hours <= 0) {
-      throw new Error('Неверное количество часов');
-    } else if (speed > this.#maxSpeed) {
-      throw new Error('Машина не может ехать так быстро');
-    } else if (this.#isStarted === false) {
-      throw new Error('Машина должна быть заведена, чтобы ехать');
-    } else if ((speed * hours * this.#fuelConsumption) / 100 > this.#currentFuelVolume) {
-      throw new Error('Недостаточно топлива');
+    let fuelRequired = (speed * hours * this.#fuelConsumption) / 100;
+
+    switch (true) {
+      case typeof speed !== 'number' || speed <= 0:
+        throw new Error('Неверная скорость');
+      case typeof hours !== 'number' || hours <= 0:
+        throw new Error('Неверное количество часов');
+      case speed > this.#maxSpeed:
+        throw new Error('Машина не может ехать так быстро');
+      case this.#isStarted === false:
+        throw new Error('Машина должна быть заведена, чтобы ехать');
+      case fuelRequired > this.#currentFuelVolume:
+        throw new Error('Недостаточно топлива');
     }
 
-    this.#currentFuelVolume -= (speed * hours * this.#fuelConsumption) / 100;
+    this.#currentFuelVolume -= fuelRequired;
     this.#mileage += speed * hours;
   }
 }
