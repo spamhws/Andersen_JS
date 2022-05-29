@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Circle-icons-calculator.svg/1200px-Circle-icons-calculator.svg.png" />
+    <title>Calculator</title>
+    <script defer src="script.js"></script>
+    <style>
+      html {
+        font-size: 24px;
+        line-height: 100%;
+      }
+
+      body {
+        font-family: Tahoma, sans-serif;
+      }
+
+      * {
+        margin: 0;
+      }
+
+      .calc-body {
+        max-width: 500px;
+        margin: auto;
+        border: 5px solid #034d97;
+        background-color: #e8f5ff;
+        border-radius: 24px;
+        padding: 16px;
+        margin-top: 40px;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      #github {
+        align-self: flex-end;
+      }
+
+      .display {
+        position: relative;
+        width: 95%;
+        display: flex;
+        flex-flow: column;
+        border: 5px solid #a6a6a6;
+        border-radius: 12px;
+        padding: 12px;
+        background-color: white;
+        gap: 8px;
+        color: #c1c1c1;
+      }
+
+      .display > * {
+        margin: 0;
+      }
+
+      .memory-slots {
+        width: 90%;
+      }
+
+      .memory-slots > * :hover {
+        color: #e40101;
+        cursor: pointer;
+      }
+
+      [data-active='false'] {
+        display: none;
+      }
+
+      #copy-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      #main-display {
+        text-align: right;
+        height: auto;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 80px;
+        line-height: 66px;
+        margin: 0px;
+        color: black;
+      }
+
+      .display #hr {
+        width: 100%;
+        background-color: #a2a2a2;
+        height: 3px;
+      }
+
+      #past-display {
+        text-align: right;
+        margin-right: 12px;
+        overflow: hidden;
+      }
+
+      .memory-buttons {
+        display: flex;
+        gap: 12px;
+        align-self: flex-start;
+        color: #c1c1c1;
+        user-select: none;
+      }
+
+      .memory-buttons > *:hover {
+        color: #e40101;
+        cursor: pointer;
+      }
+
+      .keyboard {
+        margin-top: 12px;
+        width: 100%;
+        position: relative;
+        display: flex;
+        gap: 12px;
+        align-self: stretch;
+        user-select: none;
+      }
+
+      .flex-column {
+        width: 100%;
+        display: flex;
+        flex-flow: column;
+        gap: 12px;
+      }
+
+      .flex-column > * {
+        border: 2px solid #d1d0d0;
+        border-radius: 8px;
+        font-size: 60px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        line-height: 90px;
+        height: 90px;
+        box-shadow: 2px 2px 20px -16px rgba(66, 68, 90, 1);
+        cursor: pointer;
+      }
+
+      .flex-column > *:active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 20px -20px rgba(66, 68, 90, 1);
+      }
+
+      .number {
+        color: #004d9c;
+        background-color: #eeeeee;
+      }
+
+      .flex-column > .number:hover {
+        color: #c20000;
+      }
+
+      .red {
+        background-color: #e40101;
+        border: 2px solid #e40101;
+      }
+
+      .flex-column > .light-grey {
+        background-color: #afaeae;
+        border: 2px solid #afaeae;
+        line-height: 86px;
+      }
+
+      .flex-column > .dark-grey {
+        background-color: #7f7f7f;
+        border: 2px solid #7f7f7f;
+        line-height: 86px;
+      }
+
+      .flex-column > .equals {
+        background-color: #005db2;
+        border: 2px solid #005db2;
+        flex: 2;
+        line-height: 190px;
+      }
+
+      .flex-column > *:hover {
+        color: #ffa7a7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calc-body">
+      <a id="github" href="http://github.com/spamhws" target="_blank">Yehor Sanko (Github)</a>
+
+      <div class="display">
+        <div class="memory-slots" >
+          <div class="memory-slot" data-active="true">
+            <p>M<sub>1</sub>: <span id="memory-slot1">0</span></p>
+          </div>
+          <div class="memory-slot" data-active="false">
+            <p>M<sub>2</sub>: <span id="memory-slot2">0</span></p>
+          </div>
+          <div class="memory-slot" data-active="false">
+            <p>M<sub>3</sub>: <span id="memory-slot3">0</span></p>
+          </div>
+        </div>
+
+        <div id="copy-btn">&#x1F4C4</div>
+
+        <p id="main-display">0</p>
+
+        <div id="hr"></div>
+
+        <p id="past-display">0</p>
+      </div>
+
+      <div class="memory-buttons">
+        <p id="MC">MC</p>
+        <p id="MR">MR</p>
+        <p id="MMinus">M-</p>
+        <p id="MPlus">M+</p>
+      </div>
+
+      <div class="keyboard">
+        <div class="flex-column">
+          <div class="number btn">7</div>
+          <div class="number btn">4</div>
+          <div class="number btn">1</div>
+          <div class="red btn">C</div>
+        </div>
+
+        <div class="flex-column">
+          <div class="number btn">8</div>
+          <div class="number btn">5</div>
+          <div class="number btn">2</div>
+          <div class="number btn">0</div>
+        </div>
+
+        <div class="flex-column">
+          <div class="number btn">9</div>
+          <div class="number btn">6</div>
+          <div class="number btn">3</div>
+          <div class="number btn">.</div>
+        </div>
+
+        <div class="flex-column">
+          <div class="light-grey btn">&plusmn</div>
+          <div class="dark-grey btn">&times</div>
+          <div class="dark-grey btn">&#x2D</div>
+          <div class="dark-grey btn">&#43</div>
+        </div>
+
+        <div class="flex-column">
+          <div class="light-grey btn">&#8592</div>
+          <div class="dark-grey btn">&#xF7</div>
+          <div class="equals btn">&#x3D</div>
+        </div>  
+      </div>
+    </div>
+  </body>
+</html>
